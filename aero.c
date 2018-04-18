@@ -1,3 +1,13 @@
+/**
+	\file manette.c
+	\brief code de l'aeroglisseur
+	\author Lucas Mongrain
+	\date 18/04/18
+*/
+
+/******************************************************************************
+Includes
+******************************************************************************/
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -8,6 +18,9 @@
 #include "util_29.h"
 #include "driver.h"
 
+/******************************************************************************
+Defines
+******************************************************************************/
 #define ESCAPE 'A'
 #define BEGIN 'B'
 #define END 'C'
@@ -23,6 +36,9 @@
 #define OLD_BYTE 0
 #define NEW_BYTE 1
 
+/******************************************************************************
+Programme
+******************************************************************************/
 int main(int argc, char** argv)
 {
     uint8_t index = 0;
@@ -57,15 +73,15 @@ int main(int argc, char** argv)
     pwm_init();
     servo_init();
 
-    // initialise wifi
+    // initialise le wifi wifi
     OSCCAL = OSCCAL+6; // atmega avec marque
 
-    lcd_write_string("connecting...");
+    lcd_write_string("setup wifi...");
 
     DDRD = set_bit(DDRD, PD2);
     PORTD = clear_bit(PORTD, PD2);
     PORTD = set_bit(PORTD, PD2);
-    _delay_ms(1000);
+    
     uart_put_string("AT+CWMODE_DEF=2\r\n");
     _delay_ms(1000);
     uart_flush();
@@ -81,10 +97,9 @@ int main(int argc, char** argv)
     uart_put_string("AT+CIPSTATUS\r\n");
     _delay_ms(1000);
     uart_flush();
+
     lcd_clear_display();
     lcd_write_string("waiting for data");
-    //uart_put_string("AT+CIPSEND\r\n");
-    //_delay_ms(250);
 
 
 
