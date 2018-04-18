@@ -1,3 +1,14 @@
+/**
+	\file manette.c
+	\brief code de la manette
+	\author Lucas Mongrain
+    \author Temuujin Darkhantsetseg
+	\date 18/04/18
+*/
+
+/******************************************************************************
+Includes
+******************************************************************************/
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -7,6 +18,10 @@
 #include "utils.h"
 #include "lcd.h"
 #include "util_29.h"
+
+/******************************************************************************
+Defines
+******************************************************************************/
 
 #define ESCAPE 'A'
 #define BEGIN 'B'
@@ -22,6 +37,10 @@
 
 #define OLD_BYTE 0
 #define NEW_BYTE 1
+
+/******************************************************************************
+Program
+******************************************************************************/
 
 int main(int argc, char** argv)
 {

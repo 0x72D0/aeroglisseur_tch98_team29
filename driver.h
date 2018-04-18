@@ -131,18 +131,6 @@ void servo_init(void);
 void servo_set_a(uint8_t joystick_value);
 
 /**
-    \brief Applique la bonne impulsion à la sortie du servomoteur B pour lui donner un angle particulier
-	\param[in]	angle Une valeur entre 0 et 255
-    \return rien.
-
-	La valeur de l'angle qui est passé en paramètre n'a aucune relation avec une grandeur physique
-	définie (degré, radian, h:m:s...). Il s'agit d'une valeur abstraite. La seule règle qui est attendue
-	c'est que le plus petit angle soit obtenu avec -128, le plus grand avec 127 et avec 0 le servomoteur
-	devrait être droit.
-*/
-void servo_set_b(uint8_t angle);
-
-/**
     \brief Initialise les modules de PWM
     \param init_a Si == TRUE, le PWM A est initialisé
     \param init_b Si == TRUE, le PWM B est initialisé
@@ -196,27 +184,5 @@ void pwm_set_a(uint8_t duty);
 	PWM de 100%. Cette relation est linéaire sur toute l'intervalle.
 */
 void pwm_set_b(uint8_t duty);
-
-/**
-    \brief Initialise le bouton du joystick
-    \return rien.
-*/
-void joystick_button_init(void);
-
-/**
-    \brief Retourne l'état du joystick
-    \return TRUE si enfoncé, FALSE si relâché
-*/
-bool joystick_button_read(void);
-
-void joystick_speed_init(void);
-
-uint8_t joystick_speed_read(void);
-
-void joystick_direction_init(void);
-
-int8_t joystick_direction_read(void);
-
-
 
 #endif /* DRIVER_H_INCLUDED */

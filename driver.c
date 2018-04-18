@@ -1,13 +1,10 @@
 /**
 	\file  driver.c
-	\brief Code source de fonctions qui pilotent directement du mat�riel
+	\brief Code source de fonctions qui pilotent directement du materiel
 
-	\author *********************************************************
-	\author ***                                                   ***
-	\author ***               VOS NOMS ICI                        ***
-	\author ***                                                   ***
-	\author *********************************************************
-	\date XXXXX
+	\author Temuujin Darkhantsetseg
+	\author Lucas Mongrain
+	\date 18/04/18
 */
 
 /******************************************************************************
@@ -19,19 +16,19 @@ Includes
 
 
 /******************************************************************************
-D�finitions de fonctions
+Definitions des fonctions
 ******************************************************************************/
 
 void adc_init(void){
 
-	// Configuration des broches utilis�es du port A en entr�e (Entre PA0 et PA7)
+	// Configuration des broches utilisees du port A en entree (Entre PA0 et PA7)
     DDRA = set_bits(DDRA, 0);
 
-	// S�lectionner la r�f�rence de tension: la tension d'alimentation (AVCC)
+	// Selectionner la reference de tension: la tension d'alimentation (AVCC)
     ADMUX = clear_bit(ADMUX, REFS1);
     ADMUX = set_bit(ADMUX, REFS0);
 
-	// Choisir le format du r�sultat de conversion: shift � gauche pour que
+	// Choisir le format du r�sultat de conversion: shift a gauche pour que
 	// les 8 MSB se retrouvent dans le registre ADCH
 	ADMUX = set_bit(ADMUX, ADLAR);
 
@@ -46,7 +43,7 @@ void adc_init(void){
 }
 
 uint8_t adc_read(uint8_t pin_name){
-    // Choisir l'entr�e analogique (broche) � convertir
+    // Choisir l'entree analogique (broche) a convertir
     if(pin_name == PA0)
     {
         ADMUX = clear_bit(ADMUX, 1);
@@ -68,17 +65,15 @@ uint8_t adc_read(uint8_t pin_name){
         ADMUX = set_bit(ADMUX, 0);
     }
 
-	// D�marrage d'une conversion
+	// Demarrage d'une conversion
     ADCSRA = set_bit(ADCSRA, ADSC);
 	// Attente de la fin de la conversion
     while(read_bit(ADCSRA, ADSC) != 0);
-	// Lecture et renvoie du r�sultat
+	// Lecture et renvoie du resultat
     return ADCH;
 }
 
 void servo_init(void){
-
-
 	// Configuration des broches de sortie
     DDRD = set_bit(DDRD, PD5);
 
@@ -91,12 +86,12 @@ void servo_init(void){
     TCCR1B = set_bit(TCCR1B, WGM13);
     TCCR1B = set_bit(TCCR1B, WGM12);
 
-	// Configuration de la valeur maximale du compteur (top) � 20000
+	// Configuration de la valeur maximale du compteur (top) a 20000
     ICR1 = 20000;
-	// Initialiser la valeur du compteur � 0
+	// Initialiser la valeur du compteur a 0
     TCNT1 = 0;
 
-	// D�marrer le compteur et fixer un facteur de division de fr�quence � 8
+	// Demarrer le compteur et fixer un facteur de division de frequence a 8
     TCCR1B = clear_bit(TCCR1B, CS12);
     TCCR1B = clear_bit(TCCR1B, CS10);
     TCCR1B = set_bit(TCCR1B, CS11);
@@ -108,12 +103,6 @@ void servo_set_a(uint8_t joystick_value)
     uint32_t temp = joystick_value;
     temp = ((temp*1400)/255)+800;
     OCR1A = (uint16_t)temp;
-}
-
-void servo_set_b(uint8_t angle){
-
-	// Modification du rapport cyclique du PWM du servomoteur. Min = 600, Max = 2550
-
 }
 
 void pwm_init(){
@@ -129,7 +118,7 @@ void pwm_init(){
     TCCR0 = set_bit(TCCR0, WGM01);
     //TCCR0 = set_bits(TCCR0, conf);
     //TCCR0 = clear_bits(TCCR0, ~conf & 0b01001000);
-	// Demarrer le compteur et fixer un facteur de division de frequence e 1024
+	// Demarrer le compteur et fixer un facteur de division de frequence a 1024
     TCCR0 = set_bit(TCCR0, CS00);
     TCCR0 = set_bit(TCCR0, CS02);
     TCCR0 = clear_bit(TCCR0, CS01);
@@ -167,7 +156,6 @@ void pwm_set_a(uint8_t duty){
 	}
 }
 
-
 void pwm_set_b(uint8_t duty){
 
 	// Pour avoir un duty de 0, il faut eteindre le PWM et directement piloter la sortie e 0
@@ -186,13 +174,4 @@ void pwm_set_b(uint8_t duty){
 		//Active le comparateur
 		TCCR2 = set_bit(TCCR2, COM21);
 	}
-}
-
-void joystick_button_init(void){
-
-}
-
-
-bool joystick_button_read(void){
-
 }
