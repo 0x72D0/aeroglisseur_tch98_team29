@@ -39,24 +39,27 @@ Defines
 /******************************************************************************
 Programme
 ******************************************************************************/
+
+/**
+    \brief logique de la manette
+*/
 int main(int argc, char** argv)
 {
     uint8_t index = 0;
     uint8_t byte = 0;
+    uint8_t bat = 0;
 
-    // equal 1 if the program is registering byte;
+    // egal 1 si le programme enregistre des bytes;
     uint8_t in_data_write = 0;
 
-    // check if the byte is a new byte
+    // regarde si le byte et un vieu byte
     uint8_t byte_state = OLD_BYTE;
 
-    // contain the state of the program
+    // contient l'etat de la state machine
     uint8_t state = REJECT_STATE;
 
-    //check if AT+CIPSEND is send once
+    // s'assure que AT+SEND est envoyer une seul fois
     uint8_t config_wifi = 0;
-
-    uint8_t bat = 0;
 
     char transmit_data[64];
     char data[64];
@@ -81,7 +84,7 @@ int main(int argc, char** argv)
     DDRD = set_bit(DDRD, PD2);
     PORTD = clear_bit(PORTD, PD2);
     PORTD = set_bit(PORTD, PD2);
-    
+
     uart_put_string("AT+CWMODE_DEF=2\r\n");
     _delay_ms(1000);
     uart_flush();
@@ -105,7 +108,7 @@ int main(int argc, char** argv)
 
     while(1)
     {
-        // if the rx buffer is not empty
+        // si le rx buffer n'est pas vide
         if(uart_is_rx_buffer_empty() == FALSE && !byte_state)
         {
             byte = uart_get_byte();
@@ -115,19 +118,19 @@ int main(int argc, char** argv)
         // state machine
         switch(state)
         {
-            // if on a reject state
+            // si a l'etat de rejet des bytes
             case REJECT_STATE:
-                // check if the byte is new
+                // regarde si le byte est vide
                 if(byte_state)
                 {
-                    // if it's a escape byte enter in escape state
+                    // si le byte est l'escape byte, change l'etat en escape state
                     if(byte == ESCAPE)
                     {
                         state = ESCAPE_STATE;
                         byte_state = OLD_BYTE;
                     }
 
-                    // dump all the other byte
+                    // jete tout les autres bytes
                     else
                     {
                         byte_state = OLD_BYTE;
@@ -135,13 +138,13 @@ int main(int argc, char** argv)
                 }
                 break;
 
-            // if on the escape state
+            // si en escape state
             case ESCAPE_STATE:
                 if(byte_state)
                 {
                     switch(byte)
                     {
-                        // if the next byte is 'B'
+                        // si le prochain byte est 'B'
                         case BEGIN:
                             if(!in_data_write)
                             {
@@ -153,7 +156,8 @@ int main(int argc, char** argv)
                                 state = REJECT_STATE;
                             }
                             break;
-                        // if the next byte is 'C'
+
+                        // si le prochain byte est 'C'
                         case END:
                             if(in_data_write)
                             {
@@ -165,7 +169,8 @@ int main(int argc, char** argv)
                                 state = REJECT_STATE;
                             }
                             break;
-                        // if the next byte is 'A'
+
+                        // si le prochain byte est 'A'
                         case VALUE:
                             if(in_data_write)
                             {
@@ -179,6 +184,8 @@ int main(int argc, char** argv)
                                 state = REJECT_STATE;
                             }
                             break;
+
+                        // si le prochain byte est 'D'
                         case ZERO_VALUE:
                             if(in_data_write)
                             {
@@ -192,7 +199,8 @@ int main(int argc, char** argv)
                                 state = REJECT_STATE;
                             }
                             break;
-                        // if the next byte is garbage
+
+                        // si le prochain byte est du garbage
                         default:
                             byte_state = OLD_BYTE;
                             state = REJECT_STATE;
@@ -201,7 +209,8 @@ int main(int argc, char** argv)
                     }
                 }
                 break;
-            // if on begin state, initialize the data
+
+            // si en begin state, initialise les donnees
             case BEGIN_STATE:
                 state = ACCEPT_STATE;
                 in_data_write = 1;
@@ -209,13 +218,14 @@ int main(int argc, char** argv)
 
                 memory_set(data, 0, 64);
                 break;
-            // if on end state, print the data
+
+            // si en end state, utilise les donnees
             case END_STATE:
                 state = REJECT_STATE;
                 in_data_write = 0;
                 data[index] = 0;
 
-                //do the program logic
+                // afficher au lcd pour debugging
                 uint8_to_string(hor, data[0]);
                 uint8_to_string(ver, data[1]);
                 uint8_to_string(sus, data[2]);
@@ -232,8 +242,9 @@ int main(int argc, char** argv)
                 string_concat(result, result, "A:");
                 string_concat(result, result, bat_pourcentage);
                 string_concat(result, result, "%");
-
                 servo_set_a(data[0]);
+
+                // execute la logique du programme
                 pwm_set_b(data[1]);
                 pwm_set_a(data[2]);
 
@@ -243,6 +254,7 @@ int main(int argc, char** argv)
                 // transmet le pourcentage de la batterie
                 bat = ((adc_read(PA0)-107)*100)/26;
 
+                // envoie AT+CIPSEND si pas encore envoyer
                 if(config_wifi == 0)
                 {
                     uart_put_string("AT+CIPSEND\r\n");
@@ -257,18 +269,19 @@ int main(int argc, char** argv)
                 string_concat(transmit_data, transmit_data, "AC");
                 uart_put_string(transmit_data);
                 break;
-            // if on accept state, put data in the buffer
+
+            // si en accept state, met les donnees dans un buffer
             case ACCEPT_STATE:
                 if(byte_state)
                 {
-                    // if we find an escape byte
+                    // si on trouve un escape byte
                     if(byte == ESCAPE)
                     {
                         state = ESCAPE_STATE;
                         byte_state = OLD_BYTE;
                     }
 
-                    // or write the data
+                    // sinon on ecrit le data
                     else
                     {
                         data[index] = byte;
@@ -277,6 +290,8 @@ int main(int argc, char** argv)
                     }
                 }
                 break;
+
+            // si l'evenement qui arrive n'est pas gerer
             default:
                 lcd_clear_display();
                 lcd_write_string("error 101");
