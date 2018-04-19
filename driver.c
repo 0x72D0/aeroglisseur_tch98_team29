@@ -12,6 +12,7 @@ Includes
 ******************************************************************************/
 
 #include <avr/io.h>
+#include <math.h>
 #include "driver.h"
 
 
@@ -101,7 +102,8 @@ void servo_init(void){
 void servo_set_a(uint8_t joystick_value)
 {
     uint32_t temp = joystick_value;
-    temp = ((temp*1400)/255)+800;
+    // fonction arcsin pour la valeur de l'angle
+    temp = ((int)(((asin((0.0078*temp)-1.0)+M_PI_2)*1000.0)/M_PI)) + 1000;
     OCR1A = (uint16_t)temp;
 }
 

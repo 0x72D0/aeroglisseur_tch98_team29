@@ -1,5 +1,5 @@
 /**
-	\file manette.c
+	\file aero.c
 	\brief code de l'aeroglisseur
 	\author Lucas Mongrain
 	\date 18/04/18
@@ -41,7 +41,16 @@ Programme
 ******************************************************************************/
 
 /**
-    \brief logique de la manette
+    \brief logique de l'aeroglisseur
+    \return la valeur de fin
+    
+    l'aeroglisseur utilise un autre protocole que celui decrit dans le cour de tch98, le protocole utilise
+    le principe de l'escape byte, l'escape byte decider par l'equipe est le 'A', ainsi "AB" -> debut de la communication,
+    "AC" -> fin de la communication, "AA" -> byte de donnee A, "AD" -> byte 0. les autres donnees sont envoyer en "raw byte"
+    Donc, une chaine transmit a l'aeroglisseur peut ressembler a "ABAAEF8AC". L'aeroglisseur et la manette agisse comme des
+    transmetteur/recepteur, le recepteur est la finite state machine et, a l'interrieur de la manette, le message est transmit
+    dans les temps ou rien est receptionner. Tandis qu'a l'interieur de l'aeroglisseur le message est transmit a la fin de la
+    reception d'un message (pour profiter du 50ms de la manette)
 */
 int main(int argc, char** argv)
 {
