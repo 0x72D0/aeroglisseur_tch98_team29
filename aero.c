@@ -21,20 +21,51 @@ Includes
 /******************************************************************************
 Defines
 ******************************************************************************/
+/**
+    \brief contient la valeur de l'escape byte
+*/
 #define ESCAPE 'A'
+
+/**
+    \brief contient la valeur signifiant "debut"
+*/
 #define BEGIN 'B'
+
+/**
+    \brief contient la valeur signifiant "fin"
+*/
 #define END 'C'
+
+/**
+    \brief contient la valeur signifiant 'A'
+*/
 #define VALUE 'A'
+
+/**
+    \brief contient la valeur signifiant 0
+*/
 #define ZERO_VALUE 'D'
 
-#define REJECT_STATE 0
-#define ESCAPE_STATE 1
-#define ACCEPT_STATE 2
-#define BEGIN_STATE 3
-#define END_STATE 4
+/**
+    \brief etat possible de la machine state
+*/
+typedef enum
+{
+    REJECT_STATE,
+    ESCAPE_STATE,
+    ACCEPT_STATE,
+    BEGIN_STATE,
+    END_STATE
+}state_enum;
 
-#define OLD_BYTE 0
-#define NEW_BYTE 1
+/**
+    \brief etat possible des bytes
+*/
+typedef enum
+{
+    OLD_BYTE,
+    NEW_BYTE
+}byte_state_enum;
 
 /******************************************************************************
 Programme
@@ -43,7 +74,7 @@ Programme
 /**
     \brief logique de l'aeroglisseur
     \param[in] argc nombre d'argument passer a la fonction
-    \param[in] tableau de string passer a la fonction
+    \param[in] argv tableau de string passer a la fonction
     \return la valeur de fin
 
     l'aeroglisseur utilise un autre protocole que celui decrit dans le cour de tch98, le protocole utilise
@@ -64,10 +95,10 @@ int main(int argc, char** argv)
     uint8_t in_data_write = 0;
 
     // regarde si le byte et un vieu byte
-    uint8_t byte_state = OLD_BYTE;
+    byte_state_enum byte_state = OLD_BYTE;
 
     // contient l'etat de la state machine
-    uint8_t state = REJECT_STATE;
+    state_enum state = REJECT_STATE;
 
     // s'assure que AT+SEND est envoyer une seul fois
     uint8_t config_wifi = 0;

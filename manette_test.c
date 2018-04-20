@@ -1,3 +1,13 @@
+/**
+	\file manette_test.c
+	\brief code de test de la manette
+	\author Lucas Mongrain
+	\date 20/04/18
+*/
+
+/******************************************************************************
+Includes
+******************************************************************************/
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
@@ -8,6 +18,15 @@
 #include "lcd.h"
 #include "util_29.h"
 
+/******************************************************************************
+Programme
+******************************************************************************/
+/**
+    \brief code de test pour la manette
+    \param[in] argc nombre d'argument passer a la fonction
+    \param[in] argv tableau de string passer a la fonction
+    \return valeur de fin
+*/
 int main(int argc, char** argv)
 {
     char result[32];
@@ -17,7 +36,7 @@ int main(int argc, char** argv)
     char bat_man[4];
     char transmit_data[64];
 
-    int32_t ver;
+    uint8_t ver;
     uint8_t hor;
     uint8_t sus;
     uint8_t bat;
@@ -27,9 +46,7 @@ int main(int argc, char** argv)
 
     while(1)
     {
-        ver = ((255-adc_read(PA1))-30);
-        ver *= 255;
-        ver /= 215;
+        ver = (255-adc_read(PA1));
         hor = 255-adc_read(PA0);
         sus = adc_read(PA3);
         bat = ((adc_read(PA2)-125)*100)/38;
