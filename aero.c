@@ -42,8 +42,10 @@ Programme
 
 /**
     \brief logique de l'aeroglisseur
+    \param[in] argc nombre d'argument passer a la fonction
+    \param[in] tableau de string passer a la fonction
     \return la valeur de fin
-    
+
     l'aeroglisseur utilise un autre protocole que celui decrit dans le cour de tch98, le protocole utilise
     le principe de l'escape byte, l'escape byte decider par l'equipe est le 'A', ainsi "AB" -> debut de la communication,
     "AC" -> fin de la communication, "AA" -> byte de donnee A, "AD" -> byte 0. les autres donnees sont envoyer en "raw byte"

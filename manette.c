@@ -43,8 +43,10 @@ Programme
 ******************************************************************************/
 /**
     \brief logique de la manette
+    \param[in] argc nombre d'argument passer a la fonction
+    \param[in] tableau de string passer a la fonction
     \return valeur de fin
-    
+
     l'aeroglisseur utilise un autre protocole que celui decrit dans le cour de tch98, le protocole utilise
     le principe de l'escape byte, l'escape byte decider par l'equipe est le 'A', ainsi "AB" -> debut de la communication,
     "AC" -> fin de la communication, "AA" -> byte de donnee A, "AD" -> byte 0. les autres donnees sont envoyer en "raw byte"
@@ -64,7 +66,7 @@ int main(int argc, char** argv)
     char bat_aero[4];
     char transmit_data[64];
 
-    uint8_t ver;
+    int32_t ver;
     uint8_t hor;
     uint8_t sus;
     uint8_t bat;
@@ -132,8 +134,10 @@ int main(int argc, char** argv)
             case REJECT_STATE:
 
                 // regarde le pourcentage de la batterie
-                ver = adc_read(PA1);
-                hor = adc_read(PA0);
+                ver = ((255-adc_read(PA1))-30);
+                ver *= 255;
+                ver /= 215;
+                hor = 255-adc_read(PA0);
                 sus = adc_read(PA3);
                 bat = ((adc_read(PA2)-125)*100)/38;
 
