@@ -135,9 +135,6 @@ int main(int argc, char** argv)
     _delay_ms(1000);
     uart_flush();
     uart_put_string("AT+CIPSTART=\"UDP\",\"192.168.4.1\",1337,31337\r\n");
-    _delay_ms(10000);
-    uart_flush();
-    uart_put_string("AT+CIPSTATUS\r\n");
     _delay_ms(1000);
     uart_flush();
     uart_put_string("AT+CIPSEND\r\n");

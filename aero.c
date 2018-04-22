@@ -90,6 +90,7 @@ int main(int argc, char** argv)
     uint8_t index = 0;
     uint8_t byte = 0;
     uint8_t bat = 0;
+    uint16_t servo_value = 0;
 
     // egal 1 si le programme enregistre des bytes;
     uint8_t in_data_write = 0;
@@ -127,20 +128,17 @@ int main(int argc, char** argv)
     PORTD = clear_bit(PORTD, PD2);
     PORTD = set_bit(PORTD, PD2);
 
-    uart_put_string("AT+CWMODE_DEF=2\r\n");
-    _delay_ms(1000);
+    uart_put_string("AT+CWMODE_DEF=3\r\n");
+    _delay_ms(500);
     uart_flush();
     uart_put_string("AT+CWSAP_DEF=\"THING\",\"f8aa2328679b\",1,3\r\n");
-    _delay_ms(2000);
+    _delay_ms(500);
     uart_flush();
     uart_put_string("AT+CIPMODE=1\r\n");
-    _delay_ms(1000);
+    _delay_ms(500);
     uart_flush();
     uart_put_string("AT+CIPSTART=\"UDP\",\"0.0.0.0\",31337,1337\r\n");
-    _delay_ms(1000);
-    uart_flush();
-    uart_put_string("AT+CIPSTATUS\r\n");
-    _delay_ms(1000);
+    _delay_ms(500);
     uart_flush();
 
     lcd_clear_display();
@@ -284,7 +282,10 @@ int main(int argc, char** argv)
                 string_concat(result, result, "A:");
                 string_concat(result, result, bat_pourcentage);
                 string_concat(result, result, "%");
-                servo_set_a(data[0]);
+                servo_value = joystick_value;
+                // fonction arcsin pour la valeur de l'angle
+                temp = ((int)(((asin((0.0078*temp)-1.0)+M_PI_2)*1000.0)/M_PI)) + 1000;
+                servo_set_a((uint16_t)servo_value);
 
                 // execute la logique du programme
                 pwm_set_b(data[1]);

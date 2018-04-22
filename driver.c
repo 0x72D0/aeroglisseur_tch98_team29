@@ -99,12 +99,9 @@ void servo_init(void){
 
 }
 
-void servo_set_a(uint8_t joystick_value)
+void servo_set_a(uint16_t servo_value)
 {
-    uint32_t temp = joystick_value;
-    // fonction arcsin pour la valeur de l'angle
-    temp = ((int)(((asin((0.0078*temp)-1.0)+M_PI_2)*1000.0)/M_PI)) + 1000;
-    OCR1A = (uint16_t)temp;
+    OCR1A = servo_value;
 }
 
 void pwm_init(){
