@@ -291,7 +291,7 @@ int main(int argc, char** argv)
                 servo_value = (uint8_t)data[0];
                 // fonction arcsin pour la valeur de l'angle
                 //servo_value = ((int)(((asin((0.0078*servo_value)-1.0)+M_PI_2)*1000.0)/M_PI)) + 1000;
-                servo_value = ((servo_value*1000UL)/255UL)+1000UL;
+                servo_value = ((servo_value*200UL)/255UL)+1400UL;
                 servo_set_a((uint16_t)servo_value);
 
                 // execute la logique du programme

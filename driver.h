@@ -128,7 +128,7 @@ void servo_init(void);
 	c'est que le plus petit angle soit obtenu avec -128, le plus grand avec 127 et avec 0 le servomoteur
 	devrait être droit.
 */
-void servo_set_a(uint8_t joystick_value);
+void servo_set_a(uint16_t servo_value);
 
 /**
     \brief Initialise les modules de PWM
