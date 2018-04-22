@@ -162,7 +162,7 @@ int main(int argc, char** argv)
 
                 // regarde le pourcentage de la batterie
                 ver = 255-adc_read(PA1);
-                hor = adc_read(PA0);
+                hor = 255-adc_read(PA0);
                 sus = adc_read(PA3);
                 bat = ((adc_read(PA2)-125)*100)/38;
 

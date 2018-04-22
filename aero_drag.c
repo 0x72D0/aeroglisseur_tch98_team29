@@ -46,6 +46,12 @@ Defines
 */
 #define ZERO_VALUE 'D'
 
+#define CENTER 1580UL
+
+#define ANGLE_D 170UL
+
+#define ANGLE_G 170UL
+
 /**
     \brief etat possible de la machine state
 */
@@ -120,11 +126,11 @@ int main(int argc, char** argv)
     servo_init();
 
     //initialise les composante
-    servo_set_a(1500);
+    servo_set_a(CENTER);
     pwm_set_a(0);
     pwm_set_b(0);
 
-    // initialise le wifi wifi
+    // initialise la chip wifi
     OSCCAL = OSCCAL+6; // atmega avec marque
 
     lcd_write_string("setup wifi...");
@@ -289,9 +295,10 @@ int main(int argc, char** argv)
                 string_concat(result, result, bat_pourcentage);
                 string_concat(result, result, "%");
                 servo_value = (uint8_t)data[0];
-                // fonction arcsin pour la valeur de l'angle
-                //servo_value = ((int)(((asin((0.0078*servo_value)-1.0)+M_PI_2)*1000.0)/M_PI)) + 1000;
-                servo_value = ((servo_value*200UL)/255UL)+1400UL;
+                // equation de droite
+
+                servo_value = ((servo_value*(ANGLE_D*2UL))/255UL)+(CENTER-ANGLE_D);
+
                 servo_set_a((uint16_t)servo_value);
 
                 // execute la logique du programme
