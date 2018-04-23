@@ -2,7 +2,7 @@ MCU=atmega32
 CFLAGS=-g -Wall -mcall-prologues -mmcu=$(MCU) -Os -DF_CPU=8000000UL
 LDFLAGS=-Wl,-gc-sections -Wl,-relax
 CC=avr-gcc
-TARGET_1=aero
+TARGET_1=aero_race
 TARGET_2=manette
 TARGET_3=manette_test
 TARGET_4=aero_drag
@@ -28,7 +28,7 @@ $(TARGET_3).elf: $(TARGET_3).o
 $(TARGET_4).elf: $(TARGET_4).o
 	$(CC) $(CFLAGS) $(LDFLAGS) $^ lcd.c utils.c fifo.c uart.c driver.c util_29.c -o $@
 
-a: $(TARGET_1).hex
+ar: $(TARGET_1).hex
 	avrdude -c $(PROGRAMMER) -P /dev/ttyACM0 -p $(MCU) -b 19200 -U lfuse:w:0xe4:m -U hfuse:w:0xd9:m -U flash:w:$<:i
 
 ad: $(TARGET_4).hex

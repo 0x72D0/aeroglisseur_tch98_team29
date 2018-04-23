@@ -48,9 +48,9 @@ Defines
 
 #define CENTER 1580UL
 
-#define ANGLE_D 100UL
+#define ANGLE_D 400UL
 
-#define ANGLE_G 150UL
+#define ANGLE_G 440UL
 
 /**
     \brief etat possible de la machine state
