@@ -1,6 +1,6 @@
 /**
-	\file aero.c
-	\brief code de l'aeroglisseur
+	\file aero_drag.c
+	\brief code de la configuration "drag" de l'aeroglisseur
 	\author Lucas Mongrain
 	\date 18/04/18
 */
@@ -46,10 +46,19 @@ Defines
 */
 #define ZERO_VALUE 'D'
 
+/**
+    \brief contient la valeur de l'angle au centre de l'aeroglisseur
+*/
 #define CENTER 1580UL
 
+/**
+    \brief contient l'angle de droite
+*/
 #define ANGLE_D 100UL
 
+/**
+    \brief contient l'angle de gauche
+*/
 #define ANGLE_G 150UL
 
 /**

@@ -1,6 +1,6 @@
 /**
-	\file aero.c
-	\brief code de l'aeroglisseur
+	\file aero_race.c
+	\brief code de la configuration "race" de l'aeroglisseur
 	\author Lucas Mongrain
 	\date 18/04/18
 */
@@ -46,10 +46,19 @@ Defines
 */
 #define ZERO_VALUE 'D'
 
+/**
+    \brief contient l'angle du centre
+*/
 #define CENTER 1580UL
 
+/**
+    \brief contient l'angle de droite de l'aeroglisseur
+*/
 #define ANGLE_D 400UL
 
+/**
+    \brief contient l'angle de gauche de l'aeroglisseur
+*/
 #define ANGLE_G 440UL
 
 /**
